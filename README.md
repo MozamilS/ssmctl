@@ -132,7 +132,7 @@ ssmctl/
 
 ## 🤝 Contributing
 
-Not open for contributions yet — project is still being shaped.
+For contributing check out our `CONTRIBUTING.md`.
 
 ---
 
