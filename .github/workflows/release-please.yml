@@ -43,7 +43,25 @@ jobs:
           TAG="${{ needs.release-please.outputs.tag_name }}"
           test -n "$TAG"
           echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
+      - name: Append install instructions
+        run: |
+          cat >> release_notes.md << 'EOF'
 
+          ## Installation
+
+          **Homebrew:**
+          ```sh
+          brew install rhysmcneill/ssmctl/ssmctl
+          ```
+
+          **Direct download:**
+          Download the appropriate binary for your platform from the assets below, make it executable, and move it onto your `PATH`.
+
+          **Verify checksum:**
+          ```sh
+          sha256sum --check checksums.txt
+          ```
+          EOF
       - name: Build all platforms
         run: make build-all VERSION=${{ steps.version.outputs.VERSION }}
 
