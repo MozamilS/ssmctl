@@ -8,7 +8,7 @@ linters:
     - revive
     - gocritic
     - wrapcheck
-linters-settings:
-  gosec:
-    excludes:
-      - G204  # subprocess via variable is intentional for session-manager-plugin
+  settings:
+    gosec:
+      excludes:
+        - G204 # subprocess via variable is intentional for session-manager-plugin
