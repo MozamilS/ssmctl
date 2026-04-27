@@ -30,7 +30,7 @@ func ParseArg(s string) (instance, path string, isRemote bool) {
 // Safety note: base64-encoded chunks are passed to the remote shell with
 // heredoc. The 'EOF' delimiter is single-quoted, which prevents shell
 // interpretation of any characters in the chunk (i.e., +, /, =).
-func Upload(ctx context.Context, client SSMRunAPI, instanceID, localPath, remotePath string, timeout time.Duration) error {
+func Upload(ctx context.Context, client RunAPI, instanceID, localPath, remotePath string, timeout time.Duration) error {
 	data, err := os.ReadFile(localPath)
 	if err != nil {
 		return fmt.Errorf("failed to read local file: %w", err)
@@ -38,7 +38,8 @@ func Upload(ctx context.Context, client SSMRunAPI, instanceID, localPath, remote
 
 	encoded := base64.StdEncoding.EncodeToString(data)
 
-	init, err := RunCommand(ctx, client, instanceID, []string{fmt.Sprintf("printf '' > %s", tempFile)}, timeout)
+	init, err := RunCommand(ctx, client, instanceID, []string{fmt.Sprintf("cat << 'EOF' > %s\nEOF", tempFile)}, timeout)
+
 	if err != nil {
 		return fmt.Errorf("failed to initialise transfer file: %w", err)
 	}
@@ -74,7 +75,7 @@ func Upload(ctx context.Context, client SSMRunAPI, instanceID, localPath, remote
 
 	dir := filepath.Dir(remotePath)
 	result, err := RunCommand(ctx, client, instanceID,
-		[]string{fmt.Sprintf("mkdir -p %s && mv %s %s", dir, tempFile, remotePath)},
+		[]string{fmt.Sprintf("cat << 'EOF' | sh\nmkdir -p %s && mv %s %s\nEOF", dir, tempFile, remotePath)},
 		timeout,
 	)
 	if err != nil {

@@ -191,7 +191,8 @@ func TestUploadChunkWithSpecialBase64Characters(t *testing.T) {
 	// Mock client that verifies the heredoc command structure is correct.
 	client := &mockSSMRunClient{
 		sendCommandFn: func(_ context.Context, input *ssm.SendCommandInput, _ ...func(*ssm.Options)) (*ssm.SendCommandOutput, error) {
-			cmds := input.Parameters["comamnds"]
+			t.Logf("DEBUG: input.Parameters = %+v", input.Parameters)
+			cmds := input.Parameters["commands"]
 			// Verify chunks containing special characters (+, /, =) is embedded via heredoc
 			found := false
 
