@@ -30,7 +30,8 @@ func TestMain(m *testing.M) {
 	defer cleanup()
 
 	binaryPath = bin
-	m.Run()
+	//nolint:gocritic // os.Exit(m.Run()) is the standard TestMain pattern.
+	os.Exit(m.Run())
 }
 
 // buildBinary compiles cmd/ssmctl into a temporary directory and returns the
