@@ -58,9 +58,9 @@ func Upload(ctx context.Context, client SSMRunAPI, instanceID, localPath, remote
 		// such as: +, /, =.
 		result, err := RunCommand(ctx, client, instanceID,
 			[]string{fmt.Sprintf(
-				"cat << 'EOF' | base64 -d >> %s\n%s\n EOF",
-				tempFile, // Output file path
-				chunk, // base64-encoded data
+				"cat << 'EOF' | base64 -d >> %s\n%s\nEOF",
+				tempFile,
+				chunk,
 			)},
 			timeout,
 		)

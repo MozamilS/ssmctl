@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -190,6 +191,21 @@ func TestUploadChunkWithSpecialBase64Characters(t *testing.T) {
 	// Mock client that verifies the heredoc command structure is correct.
 	client := &mockSSMRunClient{
 		sendCommandFn: func(_ context.Context, input *ssm.SendCommandInput, _ ...func(*ssm.Options)) (*ssm.SendCommandOutput, error) {
+			cmds := input.Parameters["comamnds"]
+			// Verify chunks containing special characters (+, /, =) is embedded via heredoc
+			found := false
+
+			for _, cmd := range cmds {
+				if strings.Contains(cmd, "<< 'EOF'"){
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				t.Errorf("expected heredoc syntax in command, got: %v", cmds)
+			}
+
 			return &ssm.SendCommandOutput{
 				Command: &types.Command{CommandId: aws.String("cmd-special")},
 			}, nil
