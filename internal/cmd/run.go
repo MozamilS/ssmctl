@@ -10,6 +10,16 @@ import (
 	ssmlib "github.com/rhysmcneill/ssmctl/internal/ssm"
 )
 
+// ExitCodeError is returned by RunE when a remote command exits with a
+// non-zero status. main inspects this type to forward the exact exit code.
+type ExitCodeError struct {
+	ExitCode int
+}
+
+func (e *ExitCodeError) Error() string {
+	return fmt.Sprintf("command exited with code %d", e.ExitCode)
+}
+
 func runCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "run <target> -- <command>",
@@ -51,7 +61,7 @@ ssmctl does not currently select automatically.`,
 				fmt.Fprint(os.Stderr, result.Stderr)
 			}
 			if result.ExitCode != 0 {
-				os.Exit(result.ExitCode)
+				return &ExitCodeError{ExitCode: result.ExitCode}
 			}
 
 			return nil
