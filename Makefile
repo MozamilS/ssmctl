@@ -60,10 +60,12 @@ lint:
 
 # Install development tooling.  Run once after cloning.
 setup:
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+	GOTOOLCHAIN=local go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
 	go install golang.org/x/tools/cmd/goimports@latest
+	go install github.com/securego/gosec/v2/cmd/gosec@latest
 	@if command -v pre-commit >/dev/null 2>&1; then \
 		pre-commit install; \
+		pre-commit install --hook-type commit-msg; \
 	else \
 		echo "pre-commit not found — install via 'pip install pre-commit' or 'brew install pre-commit', then re-run 'make setup'"; \
 	fi
