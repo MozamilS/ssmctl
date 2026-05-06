@@ -31,7 +31,7 @@ func ParseArg(s string) (instance, path string, isRemote bool) {
 // heredoc. The 'EOF' delimiter is single-quoted, which prevents shell
 // interpretation of any characters in the chunk (i.e., +, /, =).
 func Upload(ctx context.Context, client RunAPI, instanceID, localPath, remotePath string, timeout time.Duration) error {
-	data, err := os.ReadFile(localPath)
+	data, err := os.ReadFile(localPath) // #nosec G304 -- localPath is a user-supplied CLI argument, path traversal is intentional
 	if err != nil {
 		return fmt.Errorf("failed to read local file: %w", err)
 	}
