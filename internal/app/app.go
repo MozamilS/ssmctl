@@ -6,6 +6,8 @@ package app
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 
 	awscfg "github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
@@ -50,6 +52,15 @@ func New(cfg *config.Config) (*App, error) {
 		return nil, fmt.Errorf("load AWS config: %w", err)
 	}
 
+	// If the debug flag is set, log AWS SDK initialisation details.
+	if cfg.Debug {
+		debugLog := log.New(os.Stderr, "[DEBUG] ", log.LstdFlags)
+		debugLog.Println("AWS SDK initialized")
+		debugLog.Printf("Profile: %s\n", cfg.Profile)
+		debugLog.Printf("Region: %s\n", awsCfg.Region)
+		debugLog.Printf("Output: %s\n", cfg.Output)
+		debugLog.Printf("Timeout: %v\n", cfg.Timeout)
+	}
 	// Sync the resolved region back onto cfg so commands that need to pass the
 	// region explicitly (e.g. the session-manager-plugin invocation) get the
 	// value from AWS_REGION / AWS_DEFAULT_REGION / ~/.aws/config, not just
