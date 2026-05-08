@@ -52,11 +52,11 @@ func New(cfg *config.Config) (*App, error) {
 		return nil, fmt.Errorf("load AWS config: %w", err)
 	}
 
-	// if debug flag was passed, additional information is logged.
+	// If the debug flag is set, log AWS SDK initialisation details.
 	if cfg.Debug {
 		debugLog := log.New(os.Stderr, "[DEBUG] ", log.LstdFlags)
 		debugLog.Println("AWS SDK initialized")
-		debugLog.Printf("Profile %s\n", cfg.Profile)
+		debugLog.Printf("Profile: %s\n", cfg.Profile)
 		debugLog.Printf("Region: %s\n", awsCfg.Region)
 		debugLog.Printf("Output: %s\n", cfg.Output)
 		debugLog.Printf("Timeout: %v\n", cfg.Timeout)
