@@ -2,11 +2,10 @@
 
 <h1><strong>ssmctl</strong></h1>
 
-<p><strong>No bastion hosts. No open ports. No SSH keys.</strong><br>
-The ergonomics of <code>ssh</code>, <code>scp</code>, and <code>ssh&nbsp;-L</code> — powered by AWS Systems Manager.</p>
+<p>Shell access, file transfers and port forwarding over AWS SSM —<br>
+no bastion, no open ports, no SSH keys.</p>
 
-<!-- Replace with the generated GIF once you run: vhs .github/demo.tape -->
-<!-- See .github/demo.tape for setup instructions -->
+<img src=".github/assets/banner.png" alt="ssmctl banner" width="100%" style="max-height:180px;object-fit:cover;object-position:center">
 
 <br>
 
@@ -14,7 +13,7 @@ The ergonomics of <code>ssh</code>, <code>scp</code>, and <code>ssh&nbsp;-L</cod
 [![Go](https://img.shields.io/badge/Go-1.26+-00ADD8?logo=go)](https://golang.org)
 [![Version](https://img.shields.io/github/v/tag/rhysmcneill/ssmctl)](https://github.com/rhysmcneill/ssmctl/releases)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/rhysmcneill/ssmctl?style=flat)](https://github.com/rhysmcneill/ssmctl)
+[![Stars](https://img.shields.io/github/stars/rhysmcneill/ssmctl?style=flat&color=yellow&logo=github)](https://github.com/rhysmcneill/ssmctl)
 [![Forks](https://img.shields.io/github/forks/rhysmcneill/ssmctl)](https://github.com/rhysmcneill/ssmctl/forks)
 
 <br>
@@ -29,18 +28,26 @@ The ergonomics of <code>ssh</code>, <code>scp</code>, and <code>ssh&nbsp;-L</cod
 
 ## The problem
 
-You probably access EC2 instances today with something like this:
+Getting a shell on an EC2 instance or forwarding a port to a private database looks like this today:
 
 ```bash
+# Connect to an instance
+aws ssm start-session --target i-0abc1234def5678ab
+
+# Forward a port to a private RDS database
 aws ssm start-session \
   --target i-0abc1234def5678ab \
   --document-name AWS-StartPortForwardingSessionToRemoteHost \
   --parameters '{"host":["rds.internal"],"portNumber":["5432"],"localPortNumber":["5432"]}'
 ```
 
-With `ssmctl`, that's:
+With `ssmctl`:
 
 ```bash
+# Connect to an instance
+ssmctl connect web-1
+
+# Forward a port to a private RDS database
 ssmctl forward web-1 --local 5432 --remote rds.internal:5432
 ```
 
