@@ -126,15 +126,18 @@ func TestNew_WithDebugLogsCorrectly(t *testing.T) {
 	// The middleware is added to the stack, but we can only verify app creation succeeded
 }
 
-func TestNew_WithProfile(t *testing.T) {
-	setAWSTestEnv(t, "us-east-1")
+func TestNew_RegionExplicitlySet(t *testing.T) {
+	setAWSTestEnv(t, "us-west-2")
 
-	cfg := &config.Config{Profile: "default", Output: "text", Timeout: 30 * time.Second}
+	cfg := &config.Config{Region: "us-west-2", Output: "text", Timeout: 30 * time.Second}
 	a, err := New(cfg)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	if a == nil {
 		t.Fatal("expected non-nil App")
+	}
+	if cfg.Region != "us-west-2" {
+		t.Errorf("cfg.Region = %q, want %q", cfg.Region, "us-west-2")
 	}
 }
