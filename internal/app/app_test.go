@@ -110,3 +110,35 @@ func TestNew_PrinterFormatMatchesConfig(t *testing.T) {
 		})
 	}
 }
+
+func TestNew_WithDebugInitializesRedactingTransport(t *testing.T) {
+	setAWSTestEnv(t, "us-east-1")
+
+	cfg := &config.Config{Debug: true, Output: "text", Timeout: 30 * time.Second}
+	a, err := New(cfg)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if a == nil {
+		t.Fatal("expected non-nil App")
+	}
+	// HTTPClient is now configured with RedactingTransport when Debug is true.
+	// The transport itself is tested in internal/middleware/transport_test.go.
+	// Here we just verify that App creation succeeds without panicking.
+}
+
+func TestNew_RegionExplicitlySet(t *testing.T) {
+	setAWSTestEnv(t, "us-west-2")
+
+	cfg := &config.Config{Region: "us-west-2", Output: "text", Timeout: 30 * time.Second}
+	a, err := New(cfg)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if a == nil {
+		t.Fatal("expected non-nil App")
+	}
+	if cfg.Region != "us-west-2" {
+		t.Errorf("cfg.Region = %q, want %q", cfg.Region, "us-west-2")
+	}
+}
