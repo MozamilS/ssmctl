@@ -85,35 +85,6 @@ ssmctl completion fish > ~/.config/fish/completions/ssmctl.fish
 
 ---
 
-## Verify Build Provenance
-
-All `ssmctl` releases are signed and come with SLSA provenance attestations. You can verify that a binary was built by our trusted CI/CD pipeline and hasn't been tampered with.
-
-### Install the verifier
-
-#### Option 1: Install via Go
-```bash
-$ go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@v2.7.1
-```
-
-#### Option 2: Install via Homebrew
-
-```bash
-brew install slsa-verifier
-```
-
-### Verify the `.intoto.jsonl` file
-
-```bash
-slsa-verifier verify-artifact ssmctl-linux-amd64 \
-  --provenance-path ssmctl-linux-amd64.intoto.jsonl \
-  --source-uri github.com/rhysmcneill/ssmctl \
-  --source-tag v1.0.0
-```
-Replace v1.0.0 with the version you have downloaded.
-
----
-
 ## Real-world use cases
 
 ### Debug a production instance without a bastion
@@ -255,7 +226,8 @@ ssmctl list
 | | |
 |--|--|
 | [Command reference](docs/commands.md) | All commands, flags, and examples |
-| [Installation guide](docs/installation.md) | Setup, prerequisites, and verification |
+| [Installation guide](docs/installation.md) | Setup and prerequisites |
+| [Verification guide](docs/verification.md) | SLSA Attestation verification steps |
 | [IAM reference](docs/iam.md) | Exact permissions per command with copy-paste policies |
 | [Contributing](CONTRIBUTING.md) | How to build, test, and submit changes |
 
