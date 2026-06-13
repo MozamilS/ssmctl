@@ -1,5 +1,43 @@
 # Changelog
 
+## [3.0.0](https://github.com/MozamilS/ssmctl/compare/v2.1.0...v3.0.0) (2026-06-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* v2.0.0 marks the completion of the Road to v2 milestone.
+* **v1:** add roapmap main feature set. Implement testing, homebrew tap and install. Update docs. ([#2](https://github.com/MozamilS/ssmctl/issues/2))
+
+### Features
+
+* **argument:** add --output argument for run, cp and version commands which allows users to return text (default) or json ([#61](https://github.com/MozamilS/ssmctl/issues/61)) ([39ea13f](https://github.com/MozamilS/ssmctl/commit/39ea13fbd637f4cf2d05ff3e0a8b4470f9b83ad7))
+* **cmd:** add ssmctl list command with filtering arguments for better search capabilities ([#54](https://github.com/MozamilS/ssmctl/issues/54)) ([69f0017](https://github.com/MozamilS/ssmctl/commit/69f00176c633970c1d5cf3bfa22eaa22800a0e69))
+* **cp:** add s3 file transfer option for large files ([#63](https://github.com/MozamilS/ssmctl/issues/63)) ([0ec2ad5](https://github.com/MozamilS/ssmctl/commit/0ec2ad5f6be940251112704dd187fcf5ebf00e62))
+* **debug:** added middleware to redact sensitive headers. ([#109](https://github.com/MozamilS/ssmctl/issues/109)) ([4bc9934](https://github.com/MozamilS/ssmctl/commit/4bc993424e39c11885fc3b35a98a696a4790882c))
+* **forward:** add ssmctl forward to allow users to port forward to an instance or remote host e.g. RDS ([#66](https://github.com/MozamilS/ssmctl/issues/66)) ([31d7bdf](https://github.com/MozamilS/ssmctl/commit/31d7bdfe7132813ee886bf615e1c32859c0eca53))
+* release v2.0.0 ([#78](https://github.com/MozamilS/ssmctl/issues/78)) ([c57b23c](https://github.com/MozamilS/ssmctl/commit/c57b23c3e0c67737356f891b9052535acd88d869))
+* **shell:** integrate shell completion for all shell types (fish, bash, zsh ([#74](https://github.com/MozamilS/ssmctl/issues/74)) ([efd5a76](https://github.com/MozamilS/ssmctl/commit/efd5a76ef4dfa735be08832cf3e89147d77e6ff6))
+* **ssm:** handle unsupported Windows targets ([#42](https://github.com/MozamilS/ssmctl/issues/42)) ([c7158d6](https://github.com/MozamilS/ssmctl/commit/c7158d6b445b96113f2681623fa033fad471d51b))
+* **ssm:** integrate commands for running adhoc commnands on instance, transferring files, connecting to remote instance and add release-please for automated semver releases ([753d99f](https://github.com/MozamilS/ssmctl/commit/753d99fcd1b20c228adbb611b8bd66f8c47c2c12))
+* **v1:** add roapmap main feature set. Implement testing, homebrew tap and install. Update docs. ([#2](https://github.com/MozamilS/ssmctl/issues/2)) ([5359219](https://github.com/MozamilS/ssmctl/commit/5359219e39e671ade4f6145135a1fcd1fe3d0391))
+* **windows:** add e2e support for windows ([#77](https://github.com/MozamilS/ssmctl/issues/77)) ([6796cba](https://github.com/MozamilS/ssmctl/commit/6796cba570082eb6ed4e0b925c1f9840006d57e3))
+* **windows:** support Windows targets for run and cp ([#100](https://github.com/MozamilS/ssmctl/issues/100)) ([3811af7](https://github.com/MozamilS/ssmctl/commit/3811af79d8dc1ff6abaa1ae759e6bb16e0a382a6))
+
+
+### Bug Fixes
+
+* **app:** refactor sentinel ExitCodeError and implement interface-driven App clients ([#45](https://github.com/MozamilS/ssmctl/issues/45)) ([a4a6ea2](https://github.com/MozamilS/ssmctl/commit/a4a6ea21b4bcf8a8b69860028744093b87e41336))
+* **client:** resolve an issue where by targets share the same name tag in AWS ([#52](https://github.com/MozamilS/ssmctl/issues/52)) ([8d46b41](https://github.com/MozamilS/ssmctl/commit/8d46b4171b6caec515f1613225d2a3d4c5ae4864))
+* **cli:** silence cobra duplicate error/usage output ([#84](https://github.com/MozamilS/ssmctl/issues/84)) ([cef9ab2](https://github.com/MozamilS/ssmctl/commit/cef9ab2753667b3c63f62b8a8b29fdabc7a51081))
+* **cmd:** solve evaluation on AWS_REGION, AWS_DEFAULT_REGION and ~/.aws/config ([#5](https://github.com/MozamilS/ssmctl/issues/5)) ([3d6dc66](https://github.com/MozamilS/ssmctl/commit/3d6dc669948cd6a326c19966aa16775d67196dd5))
+* **docs:** update docs, code hygiene and formatting code. ([#26](https://github.com/MozamilS/ssmctl/issues/26)) ([e21949d](https://github.com/MozamilS/ssmctl/commit/e21949db836b192a76c867d5804ce59c79f2d53c))
+* **internal:** wired debug flag ([#60](https://github.com/MozamilS/ssmctl/issues/60)) ([ec32de0](https://github.com/MozamilS/ssmctl/commit/ec32de024e8f34a379cbf65027fd8034b764059c))
+* run command argv handling after -- ([#93](https://github.com/MozamilS/ssmctl/issues/93)) ([8b62bb4](https://github.com/MozamilS/ssmctl/commit/8b62bb476d42c1976c49ad0d09833729f50e683d))
+* **session:** ignore terminal control signals during session-manager-plugin subprocess ([#88](https://github.com/MozamilS/ssmctl/issues/88)) ([2d903b8](https://github.com/MozamilS/ssmctl/commit/2d903b8a62d41c565d3bf020fdd17063a130101e))
+* **structure:** fix the repo files and structure to build ([18810f6](https://github.com/MozamilS/ssmctl/commit/18810f686f4d49a6ea0809d8fac16984d9c37b5e))
+* **tests:** solve linter and e2e ci test bugs ([#4](https://github.com/MozamilS/ssmctl/issues/4)) ([4fdd7ea](https://github.com/MozamilS/ssmctl/commit/4fdd7eae8e2da03a816f2e18d1fcd97a1b6bbb96))
+* **transfer:** Implement heredoc for chunking file transfers ([#43](https://github.com/MozamilS/ssmctl/issues/43)) ([155d2f9](https://github.com/MozamilS/ssmctl/commit/155d2f902e5de06a9e17a0fa7e6562fdb58d5a4f))
+
 ## [2.1.0](https://github.com/rhysmcneill/ssmctl/compare/v2.0.2...v2.1.0) (2026-06-13)
 
 
