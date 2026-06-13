@@ -116,6 +116,7 @@ func TestUpload(t *testing.T) {
 	}
 	if result == nil {
 		t.Fatal("Upload() returned nil result")
+		return
 	}
 	if result.Direction != "upload" {
 		t.Errorf("Direction = %q, want %q", result.Direction, "upload")
@@ -172,6 +173,7 @@ func TestDownload(t *testing.T) {
 	}
 	if result == nil {
 		t.Fatal("Download() returned nil result")
+		return
 	}
 	if result.Direction != "download" {
 		t.Errorf("Direction = %q, want %q", result.Direction, "download")
