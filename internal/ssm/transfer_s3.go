@@ -94,7 +94,7 @@ func defaultStagingKey(prefix, basename string) (string, error) {
 // supplied path cannot escape the staging prefix when concatenated.
 func sanitizeBasename(name string) string {
 	name = filepath.Base(name)
-	if name == "." || name == string(filepath.Separator) {
+	if name == "." || name == "/" || name == `\` || name == string(filepath.Separator) {
 		return "file"
 	}
 	return name
