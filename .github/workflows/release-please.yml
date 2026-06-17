@@ -34,6 +34,7 @@ jobs:
     needs: release-please
     outputs:
       hashes: ${{ steps.hash.outputs.hashes }}
+      tag_name: ${{ steps.version.outputs.TAG }}
     if: |
       github.repository == 'rhysmcneill/ssmctl' && (
         github.event_name == 'workflow_dispatch' ||
@@ -106,7 +107,7 @@ jobs:
       - name: Derive version from release tag
         id: version
         run: |
-          TAG="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag_name || needs.release-please.outputs.tag_name }}"
+          TAG= "${{ needs.build.ouputs.tag_name }}
           test -n "$TAG"
           echo "TAG=${TAG}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
