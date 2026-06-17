@@ -47,6 +47,9 @@ func ParseRemoteFlag(s string) (host string, port int, err error) {
 		if host == "" {
 			return "", 0, fmt.Errorf("--remote %q: host must not be empty when using host:port form", s)
 		}
+		if strings.Contains(host, ":") {
+			return "", 0, fmt.Errorf("--remote %q: IPv6 addresses are not supported (use hostnames or IPv4)", s)
+		}
 		p, parseErr := parsePort(portStr)
 		if parseErr != nil {
 			return "", 0, fmt.Errorf("--remote %q: %w", s, parseErr)

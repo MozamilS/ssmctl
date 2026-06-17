@@ -1,6 +1,9 @@
 package ssm
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func FuzzParseRemoteFlag(f *testing.F) {
 	testcases := []string{
@@ -23,6 +26,9 @@ func FuzzParseRemoteFlag(f *testing.F) {
 		"db:notaport",
 		"db:0",
 		"db:65536",
+		"a:b:5432",
+		"::1",
+		"::",
 	}
 	for _, tc := range testcases {
 		f.Add(tc)
@@ -36,10 +42,9 @@ func FuzzParseRemoteFlag(f *testing.F) {
 			if port < 1 || port > 65535 {
 				t.Errorf("ParseRemoteFlag(%q) returned invalid port %d", input, port)
 			}
-			// If no error and RemoteHost is set, it should not be empty
-			if host == "" || host != "" {
-				// This is always true, just a sanity check that parsing succeeded
-				_ = host
+
+			if host != "" && strings.Contains(host, ":") {
+				t.Errorf("ParseRemoteFlag(%q): host %q still contains a colon after parsing", input, host)
 			}
 		}
 	})
