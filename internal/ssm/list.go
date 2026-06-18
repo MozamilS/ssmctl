@@ -47,6 +47,11 @@ func filterInstances(items []ssmtypes.InstanceInformation, names map[string]stri
 	var result []InstanceInfo
 	for _, item := range items {
 		id := aws.ToString(item.InstanceId)
+
+		if id == "" {
+			continue
+		}
+
 		name := names[id]
 		platformStr := string(item.PlatformType)
 		status := string(item.PingStatus)
@@ -69,6 +74,7 @@ func filterInstances(items []ssmtypes.InstanceInformation, names map[string]stri
 	return result
 
 }
+
 func describeAllInstances(ctx context.Context, ssmClient ListAPI) ([]ssmtypes.InstanceInformation, error) {
 	var items []ssmtypes.InstanceInformation
 	var nextToken *string
