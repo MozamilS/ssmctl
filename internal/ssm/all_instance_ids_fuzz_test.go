@@ -26,8 +26,8 @@ func FuzzAllInstanceIDs(f *testing.F) {
 		output := generateInstancesOutput(numReservations, instancesPerRes, includeNilID)
 		result := allInstanceIDs(output)
 
-		// Invariant: result length matches instance count
-		expectedCount := countInstancesInOutput(output)
+		// Invariant: result length matches non-nil instance count
+		expectedCount := countNonNilInstances(output)
 		if len(result) != expectedCount {
 			t.Errorf("allInstanceIDs: got %d IDs, expected %d", len(result), expectedCount)
 		}
@@ -66,13 +66,17 @@ func generateInstancesOutput(numReservations, instancesPerRes int, includeNilID 
 	return &ec2.DescribeInstancesOutput{Reservations: reservations}
 }
 
-func countInstancesInOutput(output *ec2.DescribeInstancesOutput) int {
+func countNonNilInstances(output *ec2.DescribeInstancesOutput) int {
 	if output == nil {
 		return 0
 	}
 	count := 0
 	for _, r := range output.Reservations {
-		count += len(r.Instances)
+		for _, inst := range r.Instances {
+			if inst.InstanceId != nil {
+				count++
+			}
+		}
 	}
 	return count
 }
