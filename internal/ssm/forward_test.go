@@ -94,14 +94,13 @@ func TestParseRemoteFlag_InvalidPortInHostPort(t *testing.T) {
 	}
 }
 
-func TestParseRemoteFlag_MultipleColons(t *testing.T) {
-	// LastIndex means everything before the last colon is the host.
-	host, port, err := ParseRemoteFlag("a:b:5432")
+func TestParseRemoteFlag_DottedHostname(t *testing.T) {
+	host, port, err := ParseRemoteFlag("db.example.com:5432")
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if host != "a:b" {
-		t.Errorf("host = %q, want %q", host, "a:b")
+	if host != "db.example.com" {
+		t.Errorf("host = %q, want %q", host, "db.example.com")
 	}
 	if port != 5432 {
 		t.Errorf("port = %d, want 5432", port)

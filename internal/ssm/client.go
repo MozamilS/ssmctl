@@ -127,7 +127,12 @@ func allInstanceIDs(instances *ec2.DescribeInstancesOutput) []string {
 	}
 	for _, r := range instances.Reservations {
 		for _, inst := range r.Instances {
-			ids = append(ids, aws.ToString(inst.InstanceId))
+			id := aws.ToString(inst.InstanceId)
+
+			if id == "" {
+				continue
+			}
+			ids = append(ids, id)
 		}
 	}
 	return ids

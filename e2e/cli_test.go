@@ -244,8 +244,8 @@ func TestForward_InvalidRemote(t *testing.T) {
 	if err == nil {
 		t.Fatalf("expected non-zero exit for invalid --remote, got nil\noutput: %s", out)
 	}
-	if !strings.Contains(out, "invalid port") {
-		t.Errorf("expected error mentioning invalid port:\n%s", out)
+	if !strings.Contains(out, "IPv6 addresses are not supported") {
+		t.Errorf("expected error mentioning IPv6 addresses are not supported:\n%s", out)
 	}
 }
 
