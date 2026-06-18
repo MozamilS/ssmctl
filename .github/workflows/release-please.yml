@@ -108,7 +108,7 @@ jobs:
       - name: Derive version from release tag
         id: version
         run: |
-          TAG= "${{ needs.build.ouputs.tag_name }}
+          TAG="${{ needs.build.outputs.tag_name }}"
           test -n "$TAG"
           echo "TAG=${TAG}" >> $GITHUB_OUTPUT
           echo "VERSION=${TAG#v}" >> $GITHUB_OUTPUT
