@@ -9,15 +9,21 @@ import (
 )
 
 func FuzzAllInstanceIDs(f *testing.F) {
-	f.Add(0)  // nil input
-	f.Add(1)  // one reservation, one instance
-	f.Add(2)  // one reservation, two instances
-	f.Add(3)  // two reservations
-	f.Add(5)  // multiple reservations, multiple instances
-	f.Add(10) // many instances
+	f.Add(1, 1, false) // one reservation, one instance per res, no nil IDs
+	f.Add(2, 3, false) // two reservations, three instances each
+	f.Add(5, 1, true)  // multiple reservations with some nil IDs
+	f.Add(0, 0, false) // edge case: zero reservations
 
-	f.Fuzz(func(t *testing.T, numInstances int) {
-		output := generateInstancesOutput(numInstances)
+	f.Fuzz(func(t *testing.T, numReservations, instancesPerRes int, includeNilID bool) {
+		// Clamp values to reasonable ranges
+		if numReservations < 0 || numReservations > 100 {
+			numReservations = (numReservations%100 + 100) % 100
+		}
+		if instancesPerRes < 0 || instancesPerRes > 100 {
+			instancesPerRes = (instancesPerRes%100 + 100) % 100
+		}
+
+		output := generateInstancesOutput(numReservations, instancesPerRes, includeNilID)
 		result := allInstanceIDs(output)
 
 		// Invariant: result length matches instance count
@@ -35,36 +41,29 @@ func FuzzAllInstanceIDs(f *testing.F) {
 	})
 }
 
-func generateInstancesOutput(numInstances int) *ec2.DescribeInstancesOutput {
-	if numInstances <= 0 {
-		return nil
+func generateInstancesOutput(numReservations, instancesPerRes int, includeNilID bool) *ec2.DescribeInstancesOutput {
+	if numReservations <= 0 {
+		return &ec2.DescribeInstancesOutput{Reservations: []types.Reservation{}}
 	}
-
-	var instances []types.Instance
-	for i := 0; i < numInstances; i++ {
-		id := aws.String("i-" + string(rune(97+i%26)))
-		instances = append(instances, types.Instance{InstanceId: id})
-	}
-
-	numReservations := 1 + (numInstances % 3)
-	instancesPerReservation := numInstances / numReservations
 
 	var reservations []types.Reservation
-	idx := 0
-	for i := 0; i < numReservations && idx < numInstances; i++ {
-		end := idx + instancesPerReservation
-		if i == numReservations-1 {
-			end = numInstances
+	counter := 0
+	for i := 0; i < numReservations; i++ {
+		var instances []types.Instance
+		for j := 0; j < instancesPerRes; j++ {
+			var id *string
+			if includeNilID && counter%3 == 0 {
+				id = nil // Some instances have nil IDs
+			} else {
+				id = aws.String("i-" + string(rune(97+(counter%26))))
+			}
+			instances = append(instances, types.Instance{InstanceId: id})
+			counter++
 		}
-		reservations = append(reservations, types.Reservation{
-			Instances: instances[idx:end],
-		})
-		idx = end
+		reservations = append(reservations, types.Reservation{Instances: instances})
 	}
 
-	return &ec2.DescribeInstancesOutput{
-		Reservations: reservations,
-	}
+	return &ec2.DescribeInstancesOutput{Reservations: reservations}
 }
 
 func countInstancesInOutput(output *ec2.DescribeInstancesOutput) int {
