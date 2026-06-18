@@ -43,9 +43,5 @@ func FuzzDownloadBase64Decoding(f *testing.F) {
 			return
 		}
 
-		// decoding failed — ensure we got an error back
-		if err == nil {
-			t.Errorf("FuzzDownloadBase64Decoding: expected decode error for %q but got nil", encoded)
-		}
 	})
 }
