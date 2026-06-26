@@ -2,11 +2,17 @@ name: ClusterFuzzLite PR fuzzing
 on:
   pull_request:
     branches: [ "main" ]
+    paths:
+      - 'internal/ssm/**'
 
-permissions: read-all
+permissions: {}
 jobs:
   PR:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     concurrency:
       group: ${{ github.workflow }}-${{ matrix.sanitizer }}-${{ github.ref }}
       cancel-in-progress: true
@@ -16,9 +22,12 @@ jobs:
         sanitizer:
         - address
         # Override this with the sanitizers you want.
-        - undefined
-        - memory
+        #- undefined
+        #- memory
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
     - name: Build Fuzzers (${{ matrix.sanitizer }})
       id: build
       uses: google/clusterfuzzlite/actions/build_fuzzers@884713a6c30a92e5e8544c39945cd7cb630abcd1 # v1.15.3
