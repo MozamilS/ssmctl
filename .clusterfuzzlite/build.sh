@@ -14,7 +14,6 @@
 #
 cd $SRC/ssmctl
 
-go mod download
 go mod tidy
 
 count=0
